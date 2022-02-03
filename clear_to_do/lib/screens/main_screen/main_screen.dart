@@ -13,40 +13,84 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  TextEditingController createListText = TextEditingController();
+  String userListValue = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ListView.builder(
-          itemCount: headingTaskList.length,
-          itemBuilder: (context, index) {
-            int val = (255 - (index * 30));
-            if (val <= 0) val = 0;
-            var _text = headingTaskList[index]['name'].toString();
-            var _args = headingTaskList[index]['task'];
-
-            return Container(
-              color: Color.fromRGBO((val), 0, 0, 1),
-              child: ListTile(
-                contentPadding: EdgeInsets.all(10),
-                onTap: () {
-                  // Navigator.pushNamed(context, MainSubScreen.id);
-                  Navigator.of(context)
-                      .pushNamed('/mainSubScreen', arguments: _args);
-                },
-                onLongPress: () {
-                  setState(() {
-                    headingTaskList.removeAt(index);
-                    print('Long Pressed at index: $index');
-                  });
-                },
-                title: Text(
-                  _text,
-                  style: TextStyle(color: Colors.white, fontSize: 25),
+      body: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              flex: 1,
+              child: Container(
+                // color: Colors.amber,
+                child: Center(
+                  child: ListTile(
+                    title: TextField(
+                      onChanged: (value) {
+                        userListValue = value;
+                        print(value);
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Create a new list',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    trailing: MaterialButton(
+                      onPressed: () {
+                        setState(() {
+                          Map<String, Object> map = {
+                            // 'name' : createListText.text.toString(),
+                            'name': userListValue,
+                            'task': []
+                          };
+                          headingTaskList.add(map);
+                          print(map);
+                        });
+                      },
+                      child: Icon(Icons.add),
+                    ),
+                  ),
                 ),
               ),
-            );
-          },
+            ),
+            Expanded(
+              flex: 8,
+              child: ListView.builder(
+                itemCount: headingTaskList.length,
+                itemBuilder: (context, index) {
+                  int val = (255 - (index * 30));
+                  if (val <= 0) val = 0;
+                  var _text = headingTaskList[index]['name'].toString();
+                  var _args = headingTaskList[index]['task'];
+
+                  return Container(
+                    color: Color.fromRGBO((val), 0, 0, 1),
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(10),
+                      onTap: () {
+                        // Navigator.pushNamed(context, MainSubScreen.id);
+                        Navigator.of(context)
+                            .pushNamed('/mainSubScreen', arguments: _args);
+                      },
+                      onLongPress: () {
+                        setState(() {
+                          headingTaskList.removeAt(index);
+                          print('Long Pressed at index: $index');
+                        });
+                      },
+                      title: Text(
+                        _text,
+                        style: TextStyle(color: Colors.white, fontSize: 25),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
