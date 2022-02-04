@@ -3,12 +3,21 @@
 import 'package:clear_to_do/screens/main_screen/main_screen.dart';
 import 'package:clear_to_do/screens/main_screen/main_sub_screen.dart';
 import 'package:flutter/material.dart';
-
 import 'package:google_fonts/google_fonts.dart';
 import 'screens/splash_screen.dart';
 import 'utils/routes_generator.dart';
-
-void main() => runApp(ClearToDo());
+import 'firebase_options.dart';
+//must import
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(ClearToDo());
+}
 
 class ClearToDo extends StatelessWidget {
   @override
@@ -23,9 +32,11 @@ class ClearToDo extends StatelessWidget {
       title: 'Clear To Do',
       initialRoute: MainScreen.id,
       routes: {
-        SplashScreen.id : (context) => SplashScreen(),
-        MainScreen.id : (context) => MainScreen(),
-        MainSubScreen.id : (context) => MainSubScreen(list: null,)
+        SplashScreen.id: (context) => SplashScreen(),
+        MainScreen.id: (context) => MainScreen(),
+        MainSubScreen.id: (context) => MainSubScreen(
+              list: null,
+            )
       },
       onGenerateRoute: RoutGenerator.generateRoute,
     );

@@ -6,7 +6,7 @@ var subList;
 var headingTaskList = [
   {
     'name': 'List 1',
-    'task': ['Task 1', 'Task 2', 'Task 3']
+    'task': ['Excercise', 'Task 2', 'Task 3']
   },
   {
     'name': 'List 2',
