@@ -4,6 +4,7 @@ import 'package:clear_to_do/screens/main_screen/main_screen.dart';
 import 'package:clear_to_do/screens/main_screen/main_sub_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'screens/signup_screen.dart';
 import 'screens/splash_screen.dart';
 import 'utils/routes_generator.dart';
 import 'firebase_options.dart';
@@ -30,7 +31,7 @@ class ClearToDo extends StatelessWidget {
         ),
       ),
       title: 'Clear To Do',
-      initialRoute: MainScreen.id,
+      initialRoute: Signup.id,
       routes: {
         SplashScreen.id: (context) => SplashScreen(),
         MainScreen.id: (context) => MainScreen(),

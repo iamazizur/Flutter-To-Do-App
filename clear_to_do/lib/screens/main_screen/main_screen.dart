@@ -2,6 +2,7 @@
 import 'package:clear_to_do/materials/add_list_componenets.dart';
 import 'package:clear_to_do/model/models.dart';
 import 'package:clear_to_do/screens/main_screen/main_sub_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../splashScreens/splash_screens.dart';
@@ -15,8 +16,35 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   TextEditingController createListText = TextEditingController();
   String userListValue = '';
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _auth.authStateChanges().listen((user) {
+      if (user != null) {
+        print('User is currently loggedin');
+        print(user.email);
+        
+      } else {
+        print('no user logged in');
+      }
+    });
+
+    //   FirebaseAuth.instance
+    // .authStateChanges()
+    // .listen((User? user) {
+    //   if (user == null) {
+    //     print('User is currently signed out!');
+    //   } else {
+    //     print('User is signed in!');
+    //   }
+    // });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,4 +118,3 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
-
