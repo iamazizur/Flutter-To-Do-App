@@ -2,6 +2,7 @@
 import 'package:clear_to_do/materials/add_list_componenets.dart';
 import 'package:clear_to_do/model/models.dart';
 import 'package:clear_to_do/screens/main_screen/main_sub_screen.dart';
+import 'package:clear_to_do/screens/main_screen/task_list_firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,12 @@ class _MainScreenFirebaseState extends State<MainScreenFirebase> {
   }
 }
 
-class StreamsLists extends StatelessWidget {
+class StreamsLists extends StatefulWidget {
+  @override
+  State<StreamsLists> createState() => _StreamsListsState();
+}
+
+class _StreamsListsState extends State<StreamsLists> {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   @override
@@ -61,24 +67,34 @@ class StreamsLists extends StatelessWidget {
         if (snapshot.hasData) {
           var list = [];
           final lists = snapshot.data?.docs;
+          // print('''
+          //       snapshot.data?.docs.length : ${snapshot.data?.docs.length}
+          //       snapshot.data?.docs[0] : ${snapshot.data?.docs[0]}
+          //       ''');
           for (var item in lists!) {
             var x = item['name'];
-            print(item.id);
+            // print(item.id);
             list.add(x);
           }
 
           return ListView.builder(
-            itemCount: list.length,
+            // itemCount: list.length,
+            itemCount: snapshot.data?.docs.length,
             itemBuilder: (context, index) {
               int val = (255 - (index * 30));
               if (val <= 0) val = 0;
-              String title = list[index];
+              String title = snapshot.data?.docs[index]['name'];
               return Container(
                 color: Color.fromRGBO((val), 0, 0, 1),
                 child: ListTile(
                   contentPadding: EdgeInsets.all(10),
-                  onTap: () {},
-                  onLongPress: () {},
+                  onTap: () async {
+                    print(snapshot.data?.docs[index]['name']);
+                    deleteTask(snapshot.data?.docs[index].id);
+                  },
+                  onLongPress: () {
+                    Navigator.pushNamed(context, TaskList.id);
+                  },
                   title: Text(
                     title,
                     style: TextStyle(color: Colors.white, fontSize: 25),
@@ -91,5 +107,25 @@ class StreamsLists extends StatelessWidget {
         return CircularProgressIndicator();
       },
     );
+  }
+
+  Future<void> deleteTask(doc) async {
+    return _firebaseFirestore
+        .collection('tasks')
+        .doc(doc)
+        .delete()
+        .then((value) => print('deleted'))
+        .onError((error, stackTrace) => print(error));
+
+    /*
+                                      
+                                  Future<void> deleteUser() {
+                                    return users
+                                      .doc('ABC123')
+                                      .delete()
+                                      .then((value) => print("User Deleted"))
+                                      .catchError((error) => print("Failed to delete user: $error"));
+                                  }
+                                      */
   }
 }
