@@ -27,17 +27,14 @@ class _MainScreenFirebaseState extends State<MainScreenFirebase> {
         child: Column(
           children: [
             Expanded(
-              child: Container(
-                color: Colors.amber,
-                child: ElevatedButton(
-                  child: Text('add'),
-                  onPressed: () async {
-                    var x = await _tasks
-                        .collection('tasks')
-                        .add({'name': 'Latest list with id', 'id': 1});
-                    print(x);
-                  },
-                ),
+              flex: 2,
+              child: AddListWidget(
+                buttonFunction: () {
+                  print('button clicked');
+                  print(userGeneratedValue);
+                  addTitle(userGeneratedValue);
+                },
+                title: 'Create new item',
               ),
             ),
             Expanded(
@@ -49,8 +46,16 @@ class _MainScreenFirebaseState extends State<MainScreenFirebase> {
       ),
     );
   }
+
+  Future<void> addTitle(String userGeneratedValue) {
+    CollectionReference fireStore =
+        FirebaseFirestore.instance.collection('collection');
+
+    return fireStore.add({'title': userGeneratedValue});
+  }
 }
 
+//stream list
 class StreamsLists extends StatefulWidget {
   @override
   State<StreamsLists> createState() => _StreamsListsState();
@@ -62,38 +67,33 @@ class _StreamsListsState extends State<StreamsLists> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firebaseFirestore.collection('tasks').snapshots(),
+      stream: _firebaseFirestore.collection('collection').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          var list = [];
-          final lists = snapshot.data?.docs;
-          // print('''
-          //       snapshot.data?.docs.length : ${snapshot.data?.docs.length}
-          //       snapshot.data?.docs[0] : ${snapshot.data?.docs[0]}
-          //       ''');
-          for (var item in lists!) {
-            var x = item['name'];
-            // print(item.id);
-            list.add(x);
-          }
-
           return ListView.builder(
             // itemCount: list.length,
             itemCount: snapshot.data?.docs.length,
             itemBuilder: (context, index) {
               int val = (255 - (index * 30));
               if (val <= 0) val = 0;
-              String title = snapshot.data?.docs[index]['name'];
+              String title = snapshot.data?.docs[index]['title'];
               return Container(
                 color: Color.fromRGBO((val), 0, 0, 1),
                 child: ListTile(
                   contentPadding: EdgeInsets.all(10),
                   onTap: () async {
-                    print(snapshot.data?.docs[index]['name']);
+                    print(snapshot.data?.docs[index]['title']);
                     deleteTask(snapshot.data?.docs[index].id);
                   },
                   onLongPress: () {
-                    Navigator.pushNamed(context, TaskList.id);
+                    // Navigator.pushNamed(context, TaskList.id);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => TaskList(
+                          parentId: (snapshot.data!.docs[index].id),
+                        ),
+                      ),
+                    );
                   },
                   title: Text(
                     title,
