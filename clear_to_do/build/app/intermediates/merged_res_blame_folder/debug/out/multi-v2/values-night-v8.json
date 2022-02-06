@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\azirahma\\Desktop\\POD\\Flutter-To-Do-App\\clear_to_do\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-night-v8\\values-night-v8.xml",
+            "outputFile": "/Users/azizurrahman/Desktop/Flutter Files/POD/Flutter-To-Do-App/clear_to_do/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\azirahma\\Desktop\\POD\\Flutter-To-Do-App\\clear_to_do\\android\\app\\src\\main\\res\\values-night\\styles.xml",
+                    "source": "/Users/azizurrahman/Desktop/Flutter Files/POD/Flutter-To-Do-App/clear_to_do/android/app/src/main/res/values-night/styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",
