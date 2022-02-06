@@ -16,6 +16,7 @@ class AddListWidget extends StatefulWidget {
 
 class _AddListWidgetState extends State<AddListWidget> {
   String userValue = '';
+  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +27,11 @@ class _AddListWidgetState extends State<AddListWidget> {
         Expanded(
             flex: 8,
             child: Container(
+
               alignment: Alignment.center,
               color: Colors.black,
               child: TextField(
+                controller: searchController,
                 onChanged: (value) {
                   userValue = value;
                 },
@@ -49,6 +52,9 @@ class _AddListWidgetState extends State<AddListWidget> {
             onTap: () {
               userGeneratedValue = userValue;
               widget.buttonFunction();
+              setState(() {
+                searchController.clear();
+              });
             },
             child: Container(
               color: Colors.blue,

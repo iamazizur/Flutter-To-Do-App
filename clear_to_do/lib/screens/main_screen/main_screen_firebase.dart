@@ -27,12 +27,10 @@ class _MainScreenFirebaseState extends State<MainScreenFirebase> {
         child: Column(
           children: [
             Expanded(
-              flex: 2,
+              flex: 1,
               child: AddListWidget(
-                buttonFunction: () {
-                  print('button clicked');
-                  print(userGeneratedValue);
-                  addTitle(userGeneratedValue);
+                buttonFunction: () async {
+                  await addTitle(userGeneratedValue);
                 },
                 title: 'Create new item',
               ),
@@ -47,11 +45,16 @@ class _MainScreenFirebaseState extends State<MainScreenFirebase> {
     );
   }
 
-  Future<void> addTitle(String userGeneratedValue) {
+  Future<void> addTitle(String userGeneratedValue) async {
     CollectionReference fireStore =
         FirebaseFirestore.instance.collection('collection');
 
-    return fireStore.add({'title': userGeneratedValue});
+    var generatedId =
+        await fireStore.add({'title': userGeneratedValue, 'id': ''});
+    fireStore
+        .doc(generatedId.id)
+        .update({'title': userGeneratedValue, 'id': generatedId.id}).then(
+            (value) => print('succes'));
   }
 }
 
@@ -67,16 +70,19 @@ class _StreamsListsState extends State<StreamsLists> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firebaseFirestore.collection('collection').snapshots(),
+      stream: _firebaseFirestore
+          .collection('collection')
+          .orderBy('id', descending: false)
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
-            // itemCount: list.length,
             itemCount: snapshot.data?.docs.length,
             itemBuilder: (context, index) {
               int val = (255 - (index * 30));
               if (val <= 0) val = 0;
               String title = snapshot.data?.docs[index]['title'];
+
               return Container(
                 color: Color.fromRGBO((val), 0, 0, 1),
                 child: ListTile(
@@ -111,21 +117,10 @@ class _StreamsListsState extends State<StreamsLists> {
 
   Future<void> deleteTask(doc) async {
     return _firebaseFirestore
-        .collection('tasks')
+        .collection('collection')
         .doc(doc)
         .delete()
         .then((value) => print('deleted'))
         .onError((error, stackTrace) => print(error));
-
-    /*
-                                      
-                                  Future<void> deleteUser() {
-                                    return users
-                                      .doc('ABC123')
-                                      .delete()
-                                      .then((value) => print("User Deleted"))
-                                      .catchError((error) => print("Failed to delete user: $error"));
-                                  }
-                                      */
   }
 }

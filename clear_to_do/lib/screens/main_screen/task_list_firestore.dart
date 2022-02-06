@@ -41,6 +41,14 @@ class _TaskListState extends State<TaskList> {
         child: Column(
           children: [
             Expanded(
+              child: AddListWidget(
+                buttonFunction: () {
+                  addTaskList(userGeneratedValue);
+                },
+                title: 'Add tasks',
+              ),
+            ),
+            Expanded(
               child: ElevatedButton(
                 onPressed: () {
                   print(parentId);
@@ -59,6 +67,22 @@ class _TaskListState extends State<TaskList> {
         ),
       ),
     );
+  }
+
+  Future<void> addTaskList(String userGeneratedValue) async {
+    CollectionReference fireStore =
+        FirebaseFirestore.instance.collection('collection');
+
+    var generatedId = await fireStore
+        .doc(parentId)
+        .collection('tasks')
+        .add({'task': userGeneratedValue, 'id': ''});
+    fireStore
+        .doc(parentId)
+        .collection('tasks')
+        .doc(generatedId.id)
+        .update({'task': userGeneratedValue, 'id': generatedId.id}).then(
+            (value) => print('successfull added tasks'));
   }
 }
 

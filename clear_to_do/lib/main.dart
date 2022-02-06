@@ -37,7 +37,9 @@ class ClearToDo extends StatelessWidget {
       title: 'Clear To Do',
       initialRoute: MainScreenFirebase.id,
       routes: {
-        TaskList.id: (context) => TaskList(parentId: '',),
+        TaskList.id: (context) => TaskList(
+              parentId: '',
+            ),
         MainScreenFirebase.id: (context) => MainScreenFirebase(),
         SignInScreen.id: (context) => SignInScreen(),
         Signup.id: (context) => Signup(),
