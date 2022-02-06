@@ -1,4 +1,0 @@
-io/flutter/plugins/GeneratedPluginRegistrant.java
- io.flutter.plugins.GeneratedPluginRegistrant
-com/example/clear_to_do/BuildConfig.java
- com.example.clear_to_do.BuildConfig
