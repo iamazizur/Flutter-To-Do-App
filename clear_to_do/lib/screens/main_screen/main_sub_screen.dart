@@ -18,7 +18,6 @@ class _MainSubScreenState extends State<MainSubScreen> {
   List<dynamic> generatedList = subList;
   @override
   void initState() {
-    // TODO: implement initState
     // super.initState();
     print(generatedList);
     print(generatedList.runtimeType);
