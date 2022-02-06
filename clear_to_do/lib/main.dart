@@ -15,6 +15,7 @@ import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -36,10 +37,10 @@ class ClearToDo extends StatelessWidget {
       title: 'Clear To Do',
       initialRoute: TaskList.id,
       routes: {
-        TaskList.id : (context) => TaskList(),
-        MainScreenFirebase.id : (context) => MainScreenFirebase(),
-        SignInScreen.id : (context) => SignInScreen(),
-        Signup.id : (context) => Signup(),
+        TaskList.id: (context) => TaskList(),
+        MainScreenFirebase.id: (context) => MainScreenFirebase(),
+        SignInScreen.id: (context) => SignInScreen(),
+        Signup.id: (context) => Signup(),
         SplashScreen.id: (context) => SplashScreen(),
         MainScreen.id: (context) => MainScreen(),
         MainSubScreen.id: (context) => MainSubScreen(
