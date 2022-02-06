@@ -1,7 +1,8 @@
-// ignore_for_file: prefer_const_constructors,prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, prefer_const_constructors_in_immutables, unused_import, avoid_print
+// ignore_for_file: prefer_const_constructors,prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, prefer_const_constructors_in_immutables, unused_import, avoid_print, unused_local_variable
 import 'package:clear_to_do/materials/add_list_componenets.dart';
 import 'package:clear_to_do/model/models.dart';
 import 'package:clear_to_do/screens/main_screen/main_sub_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -17,33 +18,33 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   TextEditingController createListText = TextEditingController();
   String userListValue = '';
+
+  CollectionReference tasks = FirebaseFirestore.instance.collection('lists');
+  void fun() async {
+    var taskList = await tasks.get().then((value) {
+      print(value.docs[0]);
+      print(value.docs.runtimeType);
+    });
+    // var x = taskList;
+    // print(x);
+    // print(x.runtimeType);
+  }
+
   @override
   void initState() {
+    // ignore: todo
     // TODO: implement initState
     super.initState();
-    _auth.authStateChanges().listen((user) {
-      if (user != null) {
-        print('User is currently loggedin');
-        print(user.email);
-        
-      } else {
-        print('no user logged in');
-      }
-    });
-
-    //   FirebaseAuth.instance
-    // .authStateChanges()
-    // .listen((User? user) {
-    //   if (user == null) {
-    //     print('User is currently signed out!');
-    //   } else {
-    //     print('User is signed in!');
-    //   }
-    // });
+    // print(tasks.doc());
+    fun();
   }
+
+  @override
+  
 
   @override
   Widget build(BuildContext context) {
